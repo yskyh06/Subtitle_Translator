@@ -1,0 +1,16 @@
+[package]
+name = "core-rust"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+# WASM으로 빌드하기 위해 필요한 설정입니다.
+crate-type = ["cdylib"]
+
+[dependencies]
+# JS와 Rust를 연결하는 다리 역할
+wasm-bindgen = "0.2"
+# 브라우저 콘솔에 Rust 에러를 찍어주는 도구 (디버깅 필수)
+console_error_panic_hook = "0.1.7"
+# JS의 Uint8ClampedArray(이미지 데이터)를 효율적으로 다루기 위함
+js-sys = "0.3"

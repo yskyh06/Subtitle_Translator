@@ -1,38 +1,31 @@
-# To learn more about how to use Nix to configure your environment
-# see: https://developers.google.com/idx/guides/customize-idx-env
 { pkgs, ... }: {
-  # Which nixpkgs channel to use.
-  channel = "stable-24.11"; # or "unstable"
-  # Use https://search.nixos.org/packages to find packages
+  channel = "unstable"; # 최신 인덱스를 가져오기 위해 잠시 unstable 사용
+
   packages = [
-    pkgs.nodejs_22
+    pkgs.nodejs_24
+    pkgs.pnpm
+    pkgs.wasm-pack
+    # Rust 관련은 일단 제외하고 빌드 성공부터 시킵니다.
   ];
-  # Sets environment variables in the workspace
-  env = {};
+
   idx = {
-    # Search for the extensions you want on https://open-vsx.org/ and use "publisher.id"
+    # 사용할 확장 프로그램
     extensions = [
-      # "vscodevim.vim"
-      "google.gemini-cli-vscode-ide-companion"
+      "rust-lang.rust-analyzer"
     ];
-    workspace = {
-      # Runs when a workspace is first created with this `dev.nix` file
-      onCreate = {
-        npm-install = "npm i --no-audit --no-progress --timing";
-        # Open editors for the following files by default, if they exist:
-        default.openFiles = [ "src/App.tsx" "src/App.ts" "src/App.jsx" "src/App.js" ];
-      };
-      # To run something each time the workspace is (re)started, use the `onStart` hook
-    };
-    # Enable previews and customize configuration
+
+    # [핵심] 미리보기 설정 추가
     previews = {
       enable = true;
       previews = {
         web = {
+          # Vite 기본 포트인 5173 또는 프로젝트 설정에 맞춘 포트를 사용합니다.
           command = ["npm" "run" "dev" "--" "--port" "$PORT" "--host" "0.0.0.0"];
           manager = "web";
         };
       };
     };
   };
+
+  idx.workspace.onCreate = {}; # 이 부분을 비워두세요.
 }
